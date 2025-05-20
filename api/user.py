@@ -1,4 +1,5 @@
 from flask_restx import Resource
+from flask import request
 
 from api.users import users
 
@@ -16,7 +17,16 @@ class User(Resource):
         return {"error": "user not found"}, 404
 
     def put(self, id):
-        pass
-
+        for i, user in enumerate(users):
+            if id == user["id"]:
+                users[i]["firstname"] = request.json["firstname"]
+                users[i]["lastname"] = request.json["lastname"]
+                return {"msg": "successfully updated user"}, 201
+        return {"error": "user not found"}, 404
+    
     def delete(self, id):
-        pass
+        for i, user in enumerate(users):
+            if id == user["id"]:
+                users.pop(i)
+                return {"msg": "successfully deleted user"}, 201
+        return {"error": "user not found"}, 404
